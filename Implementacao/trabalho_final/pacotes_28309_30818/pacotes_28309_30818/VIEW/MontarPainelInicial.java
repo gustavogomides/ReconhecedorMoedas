@@ -12,11 +12,13 @@ import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import pacotes_28309_30818.CONTROL.ControlarAplicativo;
@@ -26,7 +28,8 @@ public class MontarPainelInicial {
 	private JFrame baseFrame;
 	private JPanel basePanel;
 	private JPanel outputPanel, outputPanelEsq, outputPanelCen, outputPanelDir;
-	public JPanel controlePanelAcao3;
+	public JPanel controlePanelCanny;
+	public JPanel controlePanelCompressao;
 
 	private JButton btCanny;
 	public JButton btEncontrarObjetos;
@@ -103,15 +106,15 @@ public class MontarPainelInicial {
 		btEncontrarObjetos = addAButton("Encontrar Objetos", "encontrarObjetos", buttonPanel, false, controlePrograma);
 		btEncontrarCedulas = addAButton("Encontrar Cédulas", "encontrarCedulas", buttonPanel, false, controlePrograma);
 		btCompressao = addAButton("Compressão", "compressao", buttonPanel, false, controlePrograma);
-		btTudo = addAButton("Tudo", "total", buttonPanel, false, controlePrograma);
+		btTudo = addAButton("Receber Cédulas", "total", buttonPanel, false, controlePrograma);
 		btSalva = addAButton("Save", "botaoSalva", buttonPanel, false, controlePrograma);
 		addAButton("END", "botaoFim", buttonPanel, true, controlePrograma);
 
 		// ADDING RADIO BUTTON PARA CONTROLE DA ACAO3
-		controlePanelAcao3 = new JPanel();
-		controlePanelAcao3.setBackground(Color.lightGray);
-		controlePanelAcao3.setMaximumSize(new Dimension(130, 300));
-		outputPanelEsq.add(controlePanelAcao3);
+		controlePanelCanny = new JPanel();
+		controlePanelCanny.setBackground(Color.lightGray);
+		controlePanelCanny.setMaximumSize(new Dimension(130, 300));
+		outputPanelEsq.add(controlePanelCanny);
 
 		acao3Panel = new JPanel();
 
@@ -134,11 +137,52 @@ public class MontarPainelInicial {
 		addAButton("OK", "filtrar", panel, true, controlePrograma);
 
 		acao3Panel.add(panel);
+		acao3Panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Canny"));
+		controlePanelCanny.add(acao3Panel);
+		controlePanelCanny.setVisible(false);
 
-		acao3Panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "acao"));
+		// ADDING RADIO BUTTON PARA CONTROLE DA ACAO 1
+		controlePanelCompressao = new JPanel();
+		controlePanelCompressao.setBackground(Color.lightGray);
+		outputPanelEsq.add(controlePanelCompressao);
 
-		controlePanelAcao3.add(acao3Panel);
-		controlePanelAcao3.setVisible(false);
+		JPanel panelCompressao = new JPanel(new GridLayout(5, 1));
+
+		JRadioButton btAcao11 = new JRadioButton(" Muito alta ", false);
+		JRadioButton btAcao12 = new JRadioButton(" Alta ", false);
+		JRadioButton btAcao13 = new JRadioButton(" Média ", false);
+		JRadioButton btAcao14 = new JRadioButton(" Baixa", false);
+		JRadioButton btAcao15 = new JRadioButton(" Muito baixa", true);
+
+		ButtonGroup btRdAcao1 = new ButtonGroup();
+		btRdAcao1.add(btAcao11);
+		btRdAcao1.add(btAcao12);
+		btRdAcao1.add(btAcao13);
+		btRdAcao1.add(btAcao14);
+		btRdAcao1.add(btAcao15);
+
+		btAcao11.setActionCommand("btAcao11");
+		btAcao11.addActionListener(controlePrograma);
+		btAcao12.setActionCommand("btAcao12");
+		btAcao12.addActionListener(controlePrograma);
+		btAcao13.setActionCommand("btAcao13");
+		btAcao13.addActionListener(controlePrograma);
+		btAcao14.setActionCommand("btAcao14");
+		btAcao14.addActionListener(controlePrograma);
+		btAcao15.setActionCommand("btAcao15");
+		btAcao15.addActionListener(controlePrograma);
+
+		panelCompressao.add(btAcao11);
+		panelCompressao.add(btAcao12);
+		panelCompressao.add(btAcao13);
+		panelCompressao.add(btAcao14);
+		panelCompressao.add(btAcao15);
+
+		JPanel acao1Panel = new JPanel();
+		acao1Panel.add(panelCompressao);
+		acao1Panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Compressão"));
+		controlePanelCompressao.add(acao1Panel);
+		controlePanelCompressao.setVisible(false);
 
 		// VISIBLE PANELS
 		outputPanel.add(outputPanelEsq, BorderLayout.LINE_START);

@@ -15,7 +15,7 @@ import java.util.Vector;
 
 public class ControlarCompressao {
 
-	String salvar, string = "";
+	String salvar, string = "", s2;
 	int i, quality;
 	Image image = null;
 	FileOutputStream dataOut = null;
@@ -23,10 +23,12 @@ public class ControlarCompressao {
 	JpegEncoder jpg;
 
 	public ControlarCompressao(String s, String s2, int quality) {
-
 		this.salvar = s;
 		this.quality = quality;
+		this.s2 = s2;
+	}
 
+	public boolean comprimir() {
 		// Arquivo de saída
 
 		outFile = new File("null");
@@ -36,7 +38,7 @@ public class ControlarCompressao {
 			outFile = new File(string.substring(0, string.lastIndexOf(".")) + (i++) + ".jpg");
 		}
 		outFile.delete();
-		System.out.println(s2);
+
 		outFile = new File(s2);
 
 		file = new File(salvar);
@@ -52,9 +54,12 @@ public class ControlarCompressao {
 			jpg.Compress();
 			try {
 				dataOut.close();
+				return true;
 			} catch (IOException e) {
+				return false;
 			}
 		}
+		return false;
 	}
 }
 

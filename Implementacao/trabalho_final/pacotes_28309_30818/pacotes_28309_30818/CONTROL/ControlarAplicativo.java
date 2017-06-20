@@ -6,7 +6,10 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -28,6 +31,8 @@ public class ControlarAplicativo implements ActionListener {
 	private boolean estadoDesenho;
 
 	private ControlarMoeda controleMoeda;
+
+	private int compressao = 10;
 
 	// *******************************************************************************************
 	public ControlarAplicativo() {
@@ -78,14 +83,15 @@ public class ControlarAplicativo implements ActionListener {
 
 				pnCenario.enableCanny(true);
 				pnCenario.enableTudo(true);
-				pnCenario.enableCompressao(true);
 			}
 		}
 
 		if (comando.equals("filtroCanny")) {
 			aplicarFiltroCanny((float) 1.0, true);
-			pnCenario.controlePanelAcao3.setVisible(true);
+			pnCenario.controlePanelCanny.setVisible(true);
+			pnCenario.controlePanelCompressao.setVisible(true);
 			pnCenario.enableEncontrarObjeto(true);
+			pnCenario.enableCompressao(true);
 		}
 
 		if (comando.equals("filtrar")) {
@@ -128,24 +134,7 @@ public class ControlarAplicativo implements ActionListener {
 		}
 
 		if (comando.equals("compressao")) {
-			JFileChooser fc = new JFileChooser();
-			JOptionPane.showMessageDialog(null, "Selecione onde deseja salvar o arquivo no formato .jpg");
-
-			FileNameExtensionFilter tipos = new FileNameExtensionFilter("JPEG (.jpg)", "jpg");
-			fc.addChoosableFileFilter(tipos);
-			fc.setAcceptAllFileFilterUsed(false);
-			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			int returnValue = fc.showSaveDialog(null);
-			String arq = null;
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				arq = fc.getSelectedFile().toString();
-			}
-			controleImagem.gravarImagem(arq, imagemAtual, nLinImageAtual, nColImageAtual);
-			String arq2 = arq + "_comprimido.jpg";
-
-			arq = arq + ".jpg";
-
-			new ControlarCompressao(arq, arq2, 10);
+			compressao(true, 0);
 		}
 
 		if (comando.equals("botaoSalva") && estadoDesenho) {
@@ -163,7 +152,7 @@ public class ControlarAplicativo implements ActionListener {
 				int valor = valorMoedas(moedaController, true);
 				if (valor != -1) {
 					new ControlarCedula(valor, controleImagem);
-					pnCenario.enableCompressao(true);
+					compressao(false, valor);
 				}
 				Thread.sleep(1000);
 			} catch (InterruptedException | IOException e2) {
@@ -185,6 +174,22 @@ public class ControlarAplicativo implements ActionListener {
 			pnCenario.enableEncontrarObjeto(false);
 			pnCenario.enableEncontrarCedulas(false);
 			pnCenario.enableTudo(false);
+		}
+
+		if (comando.equals("btAcao11")) {
+			compressao = 0;
+		}
+		if (comando.equals("btAcao12")) {
+			compressao = 5;
+		}
+		if (comando.equals("btAcao13")) {
+			compressao = 10;
+		}
+		if (comando.equals("btAcao14")) {
+			compressao = 20;
+		}
+		if (comando.equals("btAcao15")) {
+			compressao = 30;
 		}
 	}
 
@@ -264,4 +269,56 @@ public class ControlarAplicativo implements ActionListener {
 		}
 	}
 
+	private void compressao(boolean opcao, int valor) {
+		String arq = null;
+
+		if (opcao) {
+			JFileChooser fc = new JFileChooser();
+			JOptionPane.showMessageDialog(null, "Selecione onde deseja salvar o arquivo no formato .jpg");
+
+			FileNameExtensionFilter tipos = new FileNameExtensionFilter("JPEG (.jpg)", "jpg");
+			fc.addChoosableFileFilter(tipos);
+			fc.setAcceptAllFileFilterUsed(false);
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int returnValue = fc.showSaveDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				arq = fc.getSelectedFile().toString();
+			}
+
+		} else {
+			String caminhoAtual = new File("").getAbsolutePath();
+
+			String nomeArquivo = valor + "_";
+			Date date = new Date();
+			SimpleDateFormat formatador = new SimpleDateFormat("dd-MM-yyyy");
+			nomeArquivo += formatador.format(date);
+			formatador = new SimpleDateFormat("hh-mm");
+			nomeArquivo += "_" + formatador.format(date);
+			arq = caminhoAtual + "/pacotes_28309_30818/pacotes_28309_30818/imagens/compressao/" + nomeArquivo;
+		}
+
+		controleImagem.gravarImagem(arq, imagemAtual, nLinImageAtual, nColImageAtual);
+		String arq2 = arq + "_comprimido.jpg";
+
+		arq = arq + ".jpg";
+
+		ControlarCompressao controleCompressao = new ControlarCompressao(arq, arq2, compressao);
+
+		if (controleCompressao.comprimir()) {
+			if (opcao) {
+				JOptionPane.showMessageDialog(null, "Imagem Comprimida!");
+			} else {
+				System.out.println("Imagem Comprimida!");
+			}
+
+		} else {
+			if (opcao) {
+				JOptionPane.showMessageDialog(null, "Erro na Compressão!");
+			} else {
+				System.out.println("Imagem Comprimida!");
+			}
+
+		}
+	}
 }
