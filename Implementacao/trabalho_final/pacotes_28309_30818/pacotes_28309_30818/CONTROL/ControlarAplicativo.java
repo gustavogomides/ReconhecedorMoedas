@@ -78,6 +78,7 @@ public class ControlarAplicativo implements ActionListener {
 
 				pnCenario.enableCanny(true);
 				pnCenario.enableTudo(true);
+				pnCenario.enableCompressao(true);
 			}
 		}
 
@@ -122,7 +123,6 @@ public class ControlarAplicativo implements ActionListener {
 		if (comando.equals("encontrarCedulas")) {
 			int total = valorMoedas(controleMoeda, false);
 			if (total != -1) {
-				// pnCenario.enableCompressao(true);
 				new ControlarCedula(total, controleImagem);
 			}
 		}
