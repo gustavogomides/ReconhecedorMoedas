@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import pacotes_28309_30818.MODEL.Canny;
 import pacotes_28309_30818.VIEW.MontarPainelInicial;
 
 public class ControlarAplicativo implements ActionListener {
@@ -87,7 +88,7 @@ public class ControlarAplicativo implements ActionListener {
 		}
 
 		if (comando.equals("filtroCanny")) {
-			aplicarFiltroCanny((float) 1.0, true);
+			aplicarFiltroCanny(new Canny(1, 10, (float) 1.0), true);
 			pnCenario.controlePanelCanny.setVisible(true);
 			pnCenario.controlePanelCompressao.setVisible(true);
 			pnCenario.enableEncontrarObjeto(true);
@@ -110,7 +111,7 @@ public class ControlarAplicativo implements ActionListener {
 				} else if (superior <= 0) {
 					JOptionPane.showMessageDialog(null, "Superior tem que ser maior que zero!");
 				} else {
-					aplicarFiltroCanny(desvioPadrao, false);
+					aplicarFiltroCanny(new Canny((float) inferior, (float) superior, (float) desvioPadrao), false);
 				}
 			}
 
@@ -142,9 +143,9 @@ public class ControlarAplicativo implements ActionListener {
 			controleImagem.gravarImagem(nomeArquivo, imagemAtual, nLinImageAtual, nColImageAtual);
 		}
 
-		if (comando.equals("total")) {
+		if (comando.equals("receberCedulas")) {
 			try {
-				aplicarFiltroCanny((float) 1.0, true);
+				aplicarFiltroCanny(new Canny(1, 10, (float) 1.0), true);
 				Thread.sleep(1000);
 				ControlarMoeda moedaController = new ControlarMoeda(imagemAtual, nLinImageAtual, nColImageAtual,
 						desenhoDir, controleImagem, pnCenario, new ControlarMascara());
@@ -174,6 +175,9 @@ public class ControlarAplicativo implements ActionListener {
 			pnCenario.enableEncontrarObjeto(false);
 			pnCenario.enableEncontrarCedulas(false);
 			pnCenario.enableTudo(false);
+			pnCenario.controlePanelCanny.setVisible(false);
+			pnCenario.controlePanelCompressao.setVisible(false);
+			pnCenario.btReceberCedulas.setEnabled(false);
 		}
 
 		if (comando.equals("btAcao11")) {
@@ -203,18 +207,18 @@ public class ControlarAplicativo implements ActionListener {
 	}
 
 	// *******************************************************************************************
-	private void aplicarFiltroCanny(float desvioPadrao, boolean copiarImagem) {
+	private void aplicarFiltroCanny(Canny canny, boolean copiarImagem) {
 
-		ControlarCanny canny = new ControlarCanny(desvioPadrao);
+		ControlarCanny controleCanny = new ControlarCanny(canny);
 
 		char[][] imgChar = controleImagem.imagemCinzaOriginal;
 
 		BufferedImage image = controleImagem.transformarMatriz2Buffer(imgChar, nLinImageAtual, nColImageAtual);
 
-		canny.setSourceImage(image);
+		controleCanny.setSourceImage(image);
 		try {
-			canny.process();
-			Image img = canny.getEdgeImage();
+			controleCanny.process();
+			Image img = controleCanny.getEdgeImage();
 			BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null),
 					BufferedImage.TYPE_INT_ARGB);
 

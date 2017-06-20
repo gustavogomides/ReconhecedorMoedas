@@ -35,7 +35,7 @@ public class MontarPainelInicial {
 	public JButton btEncontrarObjetos;
 	private JButton btCompressao;
 	private JButton btSalva;
-	public JButton btTudo;
+	public JButton btReceberCedulas;
 	public JButton btEncontrarCedulas;
 	public JButton btReset;
 
@@ -106,7 +106,7 @@ public class MontarPainelInicial {
 		btEncontrarObjetos = addAButton("Encontrar Objetos", "encontrarObjetos", buttonPanel, false, controlePrograma);
 		btEncontrarCedulas = addAButton("Encontrar Cédulas", "encontrarCedulas", buttonPanel, false, controlePrograma);
 		btCompressao = addAButton("Compressão", "compressao", buttonPanel, false, controlePrograma);
-		btTudo = addAButton("Receber Cédulas", "total", buttonPanel, false, controlePrograma);
+		btReceberCedulas = addAButton("Receber Cédulas", "receberCedulas", buttonPanel, false, controlePrograma);
 		btSalva = addAButton("Save", "botaoSalva", buttonPanel, false, controlePrograma);
 		addAButton("END", "botaoFim", buttonPanel, true, controlePrograma);
 
@@ -317,6 +317,6 @@ public class MontarPainelInicial {
 
 	// *******************************************************************************************
 	public void enableTudo(Boolean b) {
-		btTudo.setEnabled(true);
+		btReceberCedulas.setEnabled(true);
 	}
 }

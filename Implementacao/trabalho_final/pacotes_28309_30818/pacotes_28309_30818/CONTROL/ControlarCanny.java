@@ -7,6 +7,8 @@ import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
 
+import pacotes_28309_30818.MODEL.Canny;
+
 public class ControlarCanny extends Component {
 	private static final long serialVersionUID = 1L;
 
@@ -24,27 +26,21 @@ public class ControlarCanny extends Component {
 	private Image sourceImage;
 	private Image edgeImage;
 
-	private int threshold1;
-
-	private int threshold2;
-	private int threshold;
+	private float limiteSuperior;
+	private float limiteInferior;
 	private int widGaussianKernel;
 	private float sigma;
 	int j1;
 
-	public ControlarCanny(float desvioPadrao) {
-		threshold1 = 10;
-		threshold2 = 1;
-		setThreshold(128);
+	public ControlarCanny(Canny canny) {
+		limiteSuperior = canny.getLimiteSuperior();
+		limiteInferior = canny.getLimiteInferior();
 		setGaussKernel(3);
-		setSigma(desvioPadrao);
+		setSigma(canny.getDesvioPadrao());
 	}
 
 	// inicio do processamento
 	public void process() throws Exception {
-		if (threshold < 0 || threshold > 255) {
-			throw new Exception("Threshold deve ser entre 0 e 255.");
-		}
 
 		if (widGaussianKernel < 3 || widGaussianKernel > 40) {
 			throw new Exception("widGaussianKernel deve ser entre 3 e 40.");
@@ -59,10 +55,10 @@ public class ControlarCanny extends Component {
 
 		canny(sigma, widGaussianKernel);
 
-		thresholding(threshold1, threshold2);
+		thresholding(limiteSuperior, limiteInferior);
 
 		for (int i = 0; i < picsize; i++) {
-			if (data[i] > threshold)
+			if (data[i] > 128)
 				data[i] = -1;
 
 			else
@@ -76,7 +72,7 @@ public class ControlarCanny extends Component {
 	}
 
 	// i = gaussian kernel
-	private void canny(float f, int gkernel) {
+	private void canny(float desvioPadrao, int gkernel) {
 		derivative_mag = new int[picsize];
 
 		float convy[] = new float[picsize];
@@ -95,12 +91,12 @@ public class ControlarCanny extends Component {
 			if (k4 >= gkernel)
 				break;
 
-			if (gauss(k4, f) <= 0.005F)
+			if (gauss(k4, desvioPadrao) <= 0.005F)
 				break;
 
-			meanGauss[k4] = gauss(k4, f) + gauss(k4 - 0.5F, f) + gauss(k4 + 0.5F, f);
-			meanGauss[k4] = meanGauss[k4] / 3F / (6.283185F * f * f);
-			af5[k4] = gauss(k4 + 0.5F, f) - gauss(k4 - 0.5F, f);
+			meanGauss[k4] = gauss(k4, desvioPadrao) + gauss(k4 - 0.5F, desvioPadrao) + gauss(k4 + 0.5F, desvioPadrao);
+			meanGauss[k4] = meanGauss[k4] / 3F / (6.283185F * desvioPadrao * desvioPadrao);
+			af5[k4] = gauss(k4 + 0.5F, desvioPadrao) - gauss(k4 - 0.5F, desvioPadrao);
 			k4++;
 		} while (true);
 
@@ -244,7 +240,7 @@ public class ControlarCanny extends Component {
 		return (float) Math.exp((-f * f) / (2 * f1 * f1));
 	}
 
-	private void thresholding(int i, int j) {
+	private void thresholding(float i, float j) {
 		if (i < j) {
 
 		} else {
@@ -259,7 +255,7 @@ public class ControlarCanny extends Component {
 		}
 	}
 
-	private boolean linking(int i, int j, int k) {
+	private boolean linking(int i, int j, float k) {
 		j1 = i + 1;
 		int k1 = i - 1;
 		int l1 = j + 1;
@@ -354,21 +350,6 @@ public class ControlarCanny extends Component {
 
 	public Image getEdgeImage() {
 		return edgeImage;
-	}
-
-	public void setThreshold(int i) {
-		threshold = i;
-
-	}
-
-	public void setHighThreshold(int i) {
-		threshold1 = i;
-
-	}
-
-	public void setLowThreshold(int i) {
-		threshold2 = i;
-
 	}
 
 	public void setGaussKernel(int i) {

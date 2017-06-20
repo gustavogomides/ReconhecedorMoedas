@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +22,6 @@ public class ControlarMoeda {
 	Boolean[][] visitados;
 	ArrayList<Moeda> arrMoedas;
 
-	FileWriter writer;
 	ControlarRotacao rotacao = new ControlarRotacao();
 	int nCol, nLin, maX, meX, maY, meY, moedas;
 	char[][] imagem;
@@ -37,19 +35,6 @@ public class ControlarMoeda {
 	public ControlarMoeda(char[][] imagem, int nLin, int nCol, Graphics g, ControlarImagem controleImagem,
 			MontarPainelInicial pnCen, ControlarMascara m) throws IOException {
 
-		File file = new File("mascaras.txt");
-
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			writer = new FileWriter(file);
-		} catch (IOException e) {
-
-		}
 		arrMoedas = new ArrayList<>();
 		this.mascaraControl = m;
 		this.pnCen = pnCen;
@@ -98,12 +83,6 @@ public class ControlarMoeda {
 						}
 					}
 				}
-
-				// g.setColor(Color.GREEN);
-				// g.drawLine(maX, maY, maX, meY);
-				// g.drawLine(meX, maY, meX, meY);
-				// g.drawLine(meX, meY, maX, meY);
-				// g.drawLine(meX, maY, maX, maY);
 
 				aux = new Moeda();
 
@@ -207,14 +186,7 @@ public class ControlarMoeda {
 			total = Math.floor(total);
 		}
 
-		System.out.println("Total encontrado: " + total);
-
-		try {
-			writer.flush();
-			writer.close();
-		} catch (Exception ex) {
-
-		}
+		// System.out.println("Total encontrado: " + total);
 
 		return total;
 	}
