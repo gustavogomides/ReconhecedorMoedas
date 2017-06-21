@@ -16,11 +16,13 @@ public class ControlarImagem {
 	private int nLinImagem;
 	private int nColImagem;
 	private BufferedImage imagemDada;
+	public BufferedImage imagemOriginal;
 
 	// *******************************************************************************************
 	public ControlarImagem(String nomeArquivoImagemDada, Graphics desenho) {
 
 		imagemDada = lerImagem(nomeArquivoImagemDada);
+		imagemOriginal = imagemDada;
 		if (imagemDada != null) {
 			mostrarImagemBuffer(imagemDada, desenho);
 			criarImagemCinza(imagemDada, true);
@@ -167,11 +169,15 @@ public class ControlarImagem {
 	}
 
 	// *******************************************************************************************
-	public void gravarImagem(String nomeArquivo, char[][] imagemM, int nLin, int nCol) {
+	public void gravarImagem(String nomeArquivo, char[][] imagemM, int nLin, int nCol, BufferedImage imagem) {
 		File arquivoImagem;
 		BufferedImage imagemB;
 
-		imagemB = transformarMatriz2Buffer(imagemM, nLin, nCol);
+		if (imagemM == null) {
+			imagemB = imagem;
+		} else {
+			imagemB = transformarMatriz2Buffer(imagemM, nLin, nCol);
+		}
 
 		// INICIALIZANDO VARIAVEIS
 		arquivoImagem = new File(nomeArquivo + ".jpg");

@@ -6,10 +6,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -84,15 +81,15 @@ public class ControlarAplicativo implements ActionListener {
 
 				pnCenario.enableCanny(true);
 				pnCenario.enableTudo(true);
+				pnCenario.controlePanelCompressao.setVisible(true);
+				pnCenario.enableCompressao(true);
 			}
 		}
 
 		if (comando.equals("filtroCanny")) {
 			aplicarFiltroCanny(new Canny(1, 10, (float) 1.0), true);
 			pnCenario.controlePanelCanny.setVisible(true);
-			pnCenario.controlePanelCompressao.setVisible(true);
 			pnCenario.enableEncontrarObjeto(true);
-			pnCenario.enableCompressao(true);
 		}
 
 		if (comando.equals("filtrar")) {
@@ -135,12 +132,12 @@ public class ControlarAplicativo implements ActionListener {
 		}
 
 		if (comando.equals("compressao")) {
-			compressao(true, 0);
+			compressao();
 		}
 
 		if (comando.equals("botaoSalva") && estadoDesenho) {
 			nomeArquivo = pnCenario.escolherArquivo(2);
-			controleImagem.gravarImagem(nomeArquivo, imagemAtual, nLinImageAtual, nColImageAtual);
+			controleImagem.gravarImagem(nomeArquivo, imagemAtual, nLinImageAtual, nColImageAtual, null);
 		}
 
 		if (comando.equals("receberCedulas")) {
@@ -153,7 +150,6 @@ public class ControlarAplicativo implements ActionListener {
 				int valor = valorMoedas(moedaController, true);
 				if (valor != -1) {
 					new ControlarCedula(valor, controleImagem);
-					compressao(false, valor);
 				}
 				Thread.sleep(1000);
 			} catch (InterruptedException | IOException e2) {
@@ -283,36 +279,23 @@ public class ControlarAplicativo implements ActionListener {
 		}
 	}
 
-	private void compressao(boolean opcao, int valor) {
+	private void compressao() {
 		String arq = null;
 
-		if (opcao) {
-			JFileChooser fc = new JFileChooser();
-			JOptionPane.showMessageDialog(null, "Selecione onde deseja salvar o arquivo no formato .jpg");
+		JFileChooser fc = new JFileChooser();
+		JOptionPane.showMessageDialog(null, "Selecione onde deseja salvar o arquivo no formato .jpg");
 
-			FileNameExtensionFilter tipos = new FileNameExtensionFilter("JPEG (.jpg)", "jpg");
-			fc.addChoosableFileFilter(tipos);
-			fc.setAcceptAllFileFilterUsed(false);
-			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			int returnValue = fc.showSaveDialog(null);
+		FileNameExtensionFilter tipos = new FileNameExtensionFilter("JPEG (.jpg)", "jpg");
+		fc.addChoosableFileFilter(tipos);
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnValue = fc.showSaveDialog(null);
 
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				arq = fc.getSelectedFile().toString();
-			}
-
-		} else {
-			String caminhoAtual = new File("").getAbsolutePath();
-
-			String nomeArquivo = valor + "_";
-			Date date = new Date();
-			SimpleDateFormat formatador = new SimpleDateFormat("dd-MM-yyyy");
-			nomeArquivo += formatador.format(date);
-			formatador = new SimpleDateFormat("hh-mm");
-			nomeArquivo += "_" + formatador.format(date);
-			arq = caminhoAtual + "/pacotes_28309_30818/pacotes_28309_30818/imagens/compressao/" + nomeArquivo;
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			arq = fc.getSelectedFile().toString();
 		}
 
-		controleImagem.gravarImagem(arq, imagemAtual, nLinImageAtual, nColImageAtual);
+		controleImagem.gravarImagem(arq, null, nLinImageAtual, nColImageAtual, controleImagem.imagemOriginal);
 		String arq2 = arq + "_comprimido.jpg";
 
 		arq = arq + ".jpg";
@@ -320,19 +303,9 @@ public class ControlarAplicativo implements ActionListener {
 		ControlarCompressao controleCompressao = new ControlarCompressao(arq, arq2, compressao);
 
 		if (controleCompressao.comprimir()) {
-			if (opcao) {
-				JOptionPane.showMessageDialog(null, "Imagem Comprimida!");
-			} else {
-				System.out.println("Imagem Comprimida!");
-			}
-
+			JOptionPane.showMessageDialog(null, "Imagem Comprimida!");
 		} else {
-			if (opcao) {
-				JOptionPane.showMessageDialog(null, "Erro na Compressão!");
-			} else {
-				System.out.println("Imagem Comprimida!");
-			}
-
+			JOptionPane.showMessageDialog(null, "Erro na Compressão!");
 		}
 	}
 }

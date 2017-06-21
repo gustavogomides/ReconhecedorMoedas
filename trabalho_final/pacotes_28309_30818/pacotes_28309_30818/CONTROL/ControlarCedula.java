@@ -130,7 +130,7 @@ public class ControlarCedula {
 		int qtde2 = quantidadeOriginal.get(5).getQuantidade();
 
 		String[] alt100 = { "2x50", "5x20", "10x10", "20x5", "50x2" };
-		if (qtde100 > 1) {
+		if (qtde100 >= 1) {
 			qtde100--;
 			int posicao = ThreadLocalRandom.current().nextInt(0, alt100.length - 1);
 			if (posicao == 0) {
@@ -147,7 +147,7 @@ public class ControlarCedula {
 		}
 
 		String[] alt50 = { "5x10", "10x5", "25x2" };
-		if (qtde50 > 1) {
+		if (qtde50 >= 1) {
 			qtde50--;
 			int posicao = ThreadLocalRandom.current().nextInt(0, alt50.length - 1);
 			if (posicao == 0) {
@@ -160,7 +160,7 @@ public class ControlarCedula {
 		}
 
 		String[] alt20 = { "2x10", "4x5", "10x2" };
-		if (qtde20 > 1) {
+		if (qtde20 >= 1) {
 			qtde20--;
 			int posicao = ThreadLocalRandom.current().nextInt(0, alt20.length - 1);
 			if (posicao == 0) {
@@ -173,7 +173,7 @@ public class ControlarCedula {
 		}
 
 		String[] alt10 = { "2x5", "5x2" };
-		if (qtde10 > 1) {
+		if (qtde10 >= 1) {
 			qtde10--;
 			int posicao = ThreadLocalRandom.current().nextInt(0, alt10.length - 1);
 			if (posicao == 0) {

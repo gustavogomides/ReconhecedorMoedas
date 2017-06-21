@@ -94,21 +94,21 @@ public class MontarPainelInicial {
 
 		// PANEL TITLE
 		JLabel titulo;
-		titulo = new JLabel("Francis Ribeiro e Gustavo Gomides");
+		titulo = new JLabel("Aplicativo Reconhecedor de Moedas e Contador de Montante");
 		titulo.setForeground(Color.black);
 		titulo.setFont(new Font("Dialog", Font.BOLD, 25));
 		titlePanel.add(titulo);
 
 		// ADDING BUTTONS
-		addAButton("New Image", "botaoImagem", buttonPanel, true, controlePrograma);
-		btReset = addAButton("Reset", "botaoReset", buttonPanel, false, controlePrograma);
+		addAButton("Nova Imagem", "botaoImagem", buttonPanel, true, controlePrograma);
+		btReset = addAButton("Resetar", "botaoReset", buttonPanel, false, controlePrograma);
 		btCanny = addAButton("Filtro de Canny", "filtroCanny", buttonPanel, false, controlePrograma);
 		btEncontrarObjetos = addAButton("Encontrar Objetos", "encontrarObjetos", buttonPanel, false, controlePrograma);
-		btEncontrarCedulas = addAButton("Encontrar Cédulas", "encontrarCedulas", buttonPanel, false, controlePrograma);
-		btCompressao = addAButton("Compressão", "compressao", buttonPanel, false, controlePrograma);
-		btReceberCedulas = addAButton("Receber Cédulas", "receberCedulas", buttonPanel, false, controlePrograma);
-		btSalva = addAButton("Save", "botaoSalva", buttonPanel, false, controlePrograma);
-		addAButton("END", "botaoFim", buttonPanel, true, controlePrograma);
+		btEncontrarCedulas = addAButton("Encontrar Cedulas", "encontrarCedulas", buttonPanel, false, controlePrograma);
+		btCompressao = addAButton("Compressao", "compressao", buttonPanel, false, controlePrograma);
+		btReceberCedulas = addAButton("Receber Cedulas", "receberCedulas", buttonPanel, false, controlePrograma);
+		btSalva = addAButton("Salvar", "botaoSalva", buttonPanel, false, controlePrograma);
+		addAButton("FIM", "botaoFim", buttonPanel, true, controlePrograma);
 
 		// ADDING RADIO BUTTON PARA CONTROLE DA ACAO3
 		controlePanelCanny = new JPanel();
