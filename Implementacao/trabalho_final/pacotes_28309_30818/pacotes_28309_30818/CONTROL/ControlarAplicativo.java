@@ -250,7 +250,17 @@ public class ControlarAplicativo implements ActionListener {
 	private int valorMoedas(ControlarMoeda controlarMoeda, boolean tudo) {
 		try {
 			double total = controlarMoeda.calcularValor();
-			if (controlarMoeda.verificaValorInteiro(total)) {
+			if (total == 1.0) {
+				String str = "Valor encontrado: R$" + total;
+				str += "\nVocê deve colocar no mínimo mais R$ 1!";
+				JOptionPane.showMessageDialog(null, str);
+				return -1;
+			} else if (total == 3.0) {
+				String str = "Valor encontrado: R$" + total;
+				str += "\nVocê deve retirar ou colocar R$ 1!";
+				JOptionPane.showMessageDialog(null, str);
+				return -1;
+			} else if (controlarMoeda.verificaValorInteiro(total)) {
 				JOptionPane.showMessageDialog(null, "Montante de moedas: R$" + String.format("%.2f", total));
 				if (!tudo) {
 					pnCenario.enableEncontrarCedulas(true);
